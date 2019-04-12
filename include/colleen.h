@@ -43,7 +43,7 @@ public:
         const std::vector<std::string> &option_names) noexcept;
 
     template<typename T>
-    ArgumentImpl<T> *argument(const uint64_t idx) noexcept;
+    ArgumentImpl<T> &argument(const uint64_t idx) noexcept;
 
     uint64_t noArgs() const noexcept;
 
@@ -89,7 +89,7 @@ void Colleen::addArgument(std::string argument_name, const std::string &no_argum
 }
 
 template<typename T>
-ArgumentImpl<T> *Colleen::argument(const uint64_t idx) noexcept {
+ArgumentImpl<T> &Colleen::argument(const uint64_t idx) noexcept {
     auto retval = _arguments[idx];
-    return (dynamic_cast<ArgumentImpl<T> *>(retval));
+    return *(dynamic_cast<ArgumentImpl<T> *>(retval));
 }

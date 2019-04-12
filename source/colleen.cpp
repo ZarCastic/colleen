@@ -12,8 +12,6 @@ Colleen::~Colleen() noexcept {
 }
 
 const Argument *Colleen::operator[](const uint64_t idx) const noexcept {
-    std::cerr << __FILE__ << ": " << __func__ << "\n\tReturning " << _arguments[idx]
-              << std::endl;
     return _arguments[idx];
 }
 

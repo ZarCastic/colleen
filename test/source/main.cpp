@@ -65,12 +65,17 @@ TEST(ColleenTest, ParseSingle) {
     char *argv1[] = {"Colleen", "--testArg", "test", "me"};
     EXPECT_NO_THROW(colleen.parse(argc1, argv1));
 
-    // auto colleen_arg = colleen.argument<std::string>(0);
-    auto colleen_arg = colleen[0];
-    ASSERT_NE(colleen_arg, nullptr);
+    auto colleen_arg = colleen.argument<std::string>(0);
 
-    EXPECT_EQ(*(std::string *)(colleen_arg->argument(0)), "test");
-    EXPECT_EQ(*(std::string *)(colleen_arg->argument(1)), "me");
+    EXPECT_EQ(colleen_arg[0], "test");
+    EXPECT_EQ(colleen_arg[1], "me");
+
+    testing::internal::CaptureStdout();
+    for(auto &x : colleen_arg.args()) {
+        std::cout << x << std::endl;
+    }
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "test\nme\n");
 }
 
 int main(int argc, char **argv) {

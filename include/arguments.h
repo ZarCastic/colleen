@@ -52,6 +52,9 @@ public:
     ~ArgumentImpl() noexcept;
 
     virtual const void *argument(const uint64_t idx) const noexcept;
+    const ArgumentType &operator[](const uint64_t idx) const noexcept;
+
+    const std::vector<ArgumentType> &args() const noexcept;
 
 private:
     void                      addArgument(const std::string &arg) noexcept;
@@ -116,4 +119,14 @@ void ArgumentImpl<T>::addArgument(const std::string &arg) noexcept {
 template<typename T>
 const void *ArgumentImpl<T>::argument(const uint64_t idx) const noexcept {
     return &(_arguments[idx]);
+}
+
+template<typename T>
+const T &ArgumentImpl<T>::operator[](const uint64_t idx) const noexcept {
+    return _arguments[idx];
+}
+
+template<typename T>
+const std::vector<T> &ArgumentImpl<T>::args() const noexcept {
+    return _arguments;
 }
