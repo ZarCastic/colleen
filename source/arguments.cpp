@@ -77,8 +77,3 @@ std::vector<std::string> Argument::optionNameFromArgumentName(
 }
 
 /*** ARGUMENT IMPLEMENTATION ***/
-
-template<>
-void ArgumentImpl<int>::addArgument(const std::string &arg) noexcept {
-    _arguments.push_back(std::stoi(arg));
-}

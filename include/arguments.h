@@ -57,7 +57,16 @@ public:
     const std::vector<ArgumentType> &args() const noexcept;
 
 private:
-    void                      addArgument(const std::string &arg) noexcept;
+    template<typename T>
+    void addArgument(const std::string &arg) noexcept {
+        _arguments.push_back(T(arg));
+    }
+
+    template<>
+    void addArgument<int>(const std::string &arg) noexcept {
+        _arguments.push_back(std::stoi(arg));
+    }
+
     std::vector<ArgumentType> _arguments;
 };
 
@@ -103,17 +112,12 @@ bool ArgumentImpl<T>::find(std::vector<std::string> argv) noexcept {
 
         it++;
         while((it != argv.end()) && ((*it)[0] != '-')) {
-            addArgument(*it);
+            addArgument<T>(*it);
             it++;
         }
     } while(it != argv.end());
 
     return _arguments.size() >= _no_arguments;
-}
-
-template<typename T>
-void ArgumentImpl<T>::addArgument(const std::string &arg) noexcept {
-    _arguments.push_back(T(arg));
 }
 
 template<typename T>

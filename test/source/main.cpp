@@ -23,12 +23,11 @@ TEST(ColleenTest, OneArgument) {
 
 TEST(ColleenTest, MultipleArguments) {
     Colleen colleen;
-    // colleen.addArgument<int>("testArg1", 1, {"--opt1", "--option1", "-o1"});
+    colleen.addArgument<int>("testArg1", 1, {"--opt1", "--option1", "-o1"});
     colleen.addArgument<std::string>("testArg2", 2, {"--opt2", "--option2", "-o2"});
-    // colleen.addArgument<bool>("testArg3", 3, {"--opt3", "--option3", "-o3"});
 
-    EXPECT_EQ(colleen.noArgs(), 1);
-    int i = 2;
+    EXPECT_EQ(colleen.noArgs(), 2);
+    int i = 1;
     for(const auto &arg : colleen) {
         auto arg_name = std::string("testArg") + std::to_string(i);
         EXPECT_EQ(arg.argName(), arg_name);
@@ -76,6 +75,46 @@ TEST(ColleenTest, ParseSingle) {
     }
     std::string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ(output, "test\nme\n");
+}
+
+TEST(ColleenTest, ParseMulti) {
+    Colleen colleen;
+    colleen.addArgument<std::string>("testArg1", 1);
+    colleen.addArgument<int>("testArg2", 2);
+    colleen.addArgument<std::string>("testArg3", 2);
+
+    int   argc    = 2;
+    char *argv2[] = {"Colleen", "noFullfill"};
+    EXPECT_THROW(colleen.parse(argc, argv2), std::invalid_argument);
+
+    int   argc1   = 9;
+    char *argv1[] = {"Colleen", "--testArg1", "test", "--testArg2", "1", "2",
+        "--testArg3", "Hello", "World"};
+    EXPECT_NO_THROW(colleen.parse(argc1, argv1));
+
+    auto colleen_arg1 = colleen.argument<std::string>(0);
+    testing::internal::CaptureStdout();
+    for(auto &x : colleen_arg1.args()) {
+        std::cout << x << std::endl;
+    }
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "test\n");
+
+    auto colleen_arg2 = colleen.argument<int>(1);
+    testing::internal::CaptureStdout();
+    for(auto &x : colleen_arg2.args()) {
+        std::cout << x << std::endl;
+    }
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "1\n2\n");
+
+    auto colleen_arg3 = colleen.argument<std::string>(2);
+    testing::internal::CaptureStdout();
+    for(auto &x : colleen_arg3.args()) {
+        std::cout << x << std::endl;
+    }
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Hello\nWorld\n");
 }
 
 int main(int argc, char **argv) {
