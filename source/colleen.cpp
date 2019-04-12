@@ -11,8 +11,10 @@ Colleen::~Colleen() noexcept {
     }
 }
 
-const Argument &Colleen::operator[](const uint64_t idx) const noexcept {
-    return *_arguments[idx];
+const Argument *Colleen::operator[](const uint64_t idx) const noexcept {
+    std::cerr << __FILE__ << ": " << __func__ << "\n\tReturning " << _arguments[idx]
+              << std::endl;
+    return _arguments[idx];
 }
 
 uint64_t Colleen::noArgs() const noexcept {
@@ -37,8 +39,7 @@ void Colleen::parse(int argc, char **argv) {
 
 void Colleen::parse(std::vector<std::string> argv) {
     for(auto &arg : _arguments) {
-        auto arg_found = arg->find(argv);
-        if(!arg_found) {
+        if(!arg->find(argv)) {
             throw std::invalid_argument("Argument not fullfilled");
         }
     }

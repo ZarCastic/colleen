@@ -26,25 +26,28 @@ public:
     Colleen() noexcept;
     ~Colleen() noexcept;
 
-    template <typename T>
+    template<typename T>
     void addArgument(
         std::string argument_name, const uint64_t no_arguments) noexcept;
 
-    template <typename T>
+    template<typename T>
     void addArgument(
         std::string argument_name, const std::string &no_arguments) noexcept;
 
-    template <typename T>
+    template<typename T>
     void addArgument(std::string argument_name, const uint64_t no_arguments,
         const std::vector<std::string> &option_names) noexcept;
 
-    template <typename T>
+    template<typename T>
     void addArgument(std::string argument_name, const std::string &no_arguments,
         const std::vector<std::string> &option_names) noexcept;
 
+    template<typename T>
+    ArgumentImpl<T> *argument(const uint64_t idx) noexcept;
+
     uint64_t noArgs() const noexcept;
 
-    const Argument &operator[](const uint64_t idx) const noexcept;
+    const Argument *operator[](const uint64_t idx) const noexcept;
     ArgIterator     begin() noexcept;
     ArgIterator     end() noexcept;
 
@@ -55,21 +58,21 @@ private:
     void                    parse(const std::vector<std::string> argv);
 };
 
-template <typename T>
+template<typename T>
 void Colleen::addArgument(
     std::string argument_name, const uint64_t no_arguments) noexcept {
     auto new_argument = new ArgumentImpl<T>(argument_name, no_arguments);
     _arguments.push_back(new_argument);
 }
 
-template <typename T>
+template<typename T>
 void Colleen::addArgument(
     std::string argument_name, const std::string &no_arguments) noexcept {
     auto new_argument = new ArgumentImpl<T>(argument_name, no_arguments);
     _arguments.push_back(new_argument);
 }
 
-template <typename T>
+template<typename T>
 void Colleen::addArgument(std::string argument_name, const uint64_t no_arguments,
     const std::vector<std::string> &option_names) noexcept {
     auto new_argument
@@ -77,10 +80,16 @@ void Colleen::addArgument(std::string argument_name, const uint64_t no_arguments
     _arguments.push_back(new_argument);
 }
 
-template <typename T>
+template<typename T>
 void Colleen::addArgument(std::string argument_name, const std::string &no_arguments,
     const std::vector<std::string> &option_names) noexcept {
     auto new_argument
         = new ArgumentImpl<T>(argument_name, no_arguments, option_names);
     _arguments.push_back(new_argument);
+}
+
+template<typename T>
+ArgumentImpl<T> *Colleen::argument(const uint64_t idx) noexcept {
+    auto retval = _arguments[idx];
+    return (dynamic_cast<ArgumentImpl<T> *>(retval));
 }

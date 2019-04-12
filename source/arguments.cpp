@@ -52,6 +52,11 @@ bool Argument::find(std::vector<std::string> argv) noexcept {
     return false;
 }
 
+const void *Argument::argument(const uint64_t idx) const noexcept {
+    throw std::runtime_error("Argument::find should not be called");
+    return nullptr;
+}
+
 uint64_t Argument::stringToArgNum(const std::string &no_arguments) noexcept {
     std::cerr << "Not jet implemented: " << __FILE__ << ": " << __func__
               << std::endl;
@@ -69,4 +74,11 @@ std::vector<std::string> Argument::optionNameFromArgumentName(
 
     option_names.push_back(lower_argument_name);
     return option_names;
+}
+
+/*** ARGUMENT IMPLEMENTATION ***/
+
+template<>
+void ArgumentImpl<int>::addArgument(const std::string &arg) noexcept {
+    _arguments.push_back(std::stoi(arg));
 }

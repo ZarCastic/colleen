@@ -21,7 +21,8 @@ public:
     const std::pair<uint64_t, bool> argumentType() const noexcept;
     const std::string &             argName() const noexcept;
 
-    virtual bool find(std::vector<std::string> argv) noexcept;
+    virtual bool        find(std::vector<std::string> argv) noexcept;
+    virtual const void *argument(const uint64_t idx) const noexcept;
 
 protected:
     const uint64_t                 _no_arguments;
@@ -34,7 +35,9 @@ protected:
         const std::string &no_arguments) noexcept;
 };
 
-template <typename ArgumentType> class ArgumentImpl : public Argument {
+template<typename ArgumentType>
+class ArgumentImpl : public Argument {
+
 public:
     ArgumentImpl(const std::string &arg_name, const uint64_t no_arguments) noexcept;
     ArgumentImpl(
@@ -48,50 +51,69 @@ public:
 
     ~ArgumentImpl() noexcept;
 
+    virtual const void *argument(const uint64_t idx) const noexcept;
+
 private:
+    void                      addArgument(const std::string &arg) noexcept;
     std::vector<ArgumentType> _arguments;
 };
 
-template <typename T>
+template<typename T>
 ArgumentImpl<T>::ArgumentImpl(const std::string &arg_name,
     const uint64_t no_arguments, const std::vector<std::string> options) noexcept
   : Argument(arg_name, no_arguments, options) {
 }
 
-template <typename T>
+template<typename T>
 ArgumentImpl<T>::ArgumentImpl(const std::string &arg_name,
     const std::string &no_arguments, const std::vector<std::string> options) noexcept
   : Argument(arg_name, no_arguments, options) {
 }
 
-template <typename T>
+template<typename T>
 ArgumentImpl<T>::ArgumentImpl(
     const std::string &arg_name, const uint64_t no_arguments) noexcept
   : Argument(arg_name, no_arguments) {
 }
 
-template <typename T>
+template<typename T>
 ArgumentImpl<T>::ArgumentImpl(
     const std::string &arg_name, const std::string &no_arguments) noexcept
   : Argument(arg_name, no_arguments) {
 }
 
-template <typename T> ArgumentImpl<T>::~ArgumentImpl() noexcept {
+template<typename T>
+ArgumentImpl<T>::~ArgumentImpl() noexcept {
 }
 
-template <typename T>
+template<typename T>
 bool ArgumentImpl<T>::find(std::vector<std::string> argv) noexcept {
-    bool fullfilled = false;
+    auto it = argv.begin();
+    do {
+        it = std::find_if(it, argv.end(), [this](const std::string &arg) {
+            return std::find(_option_names.begin(), _option_names.end(), arg)
+                != _option_names.end();
+        });
+        if(it == argv.end()) {
+            break;
+        }
 
-    auto it = std::find_if(argv.begin(), argv.end(), [this](const std::string &arg) {
-        return std::find(_option_names.begin(), _option_names.end(), arg)
-            != _option_names.end();
-    });
+        it++;
+        while((it != argv.end()) && ((*it)[0] != '-')) {
+            addArgument(*it);
+            it++;
+        }
+    } while(it != argv.end());
 
-    fullfilled = (it != argv.end());
-    // TODO finish
-    std::cerr << "Not jet implemented fully: " << __FILE__ << ": " << __func__
-              << std::endl;
+    return _arguments.size() >= _no_arguments;
+}
 
-    return fullfilled;
+template<typename T>
+void ArgumentImpl<T>::addArgument(const std::string &arg) noexcept {
+    _arguments.push_back(T(arg));
+}
+
+template<typename T>
+const void *ArgumentImpl<T>::argument(const uint64_t idx) const noexcept {
+    return &(_arguments[idx]);
 }
