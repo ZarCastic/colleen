@@ -8,17 +8,17 @@
 
 class Argument {
 public:
-    Argument(const std::string &arg_name, const uint64_t no_arguments,
-        const std::vector<std::string> options) noexcept;
-    Argument(const std::string &arg_name, const std::string &no_arguments,
-        const std::vector<std::string> options) noexcept;
+    Argument(std::string arg_name, const uint64_t no_arguments,
+        std::vector<std::string>  options) noexcept;
+    Argument(std::string arg_name, const std::string &no_arguments,
+        std::vector<std::string>  options) noexcept;
     Argument(const std::string &arg_name, const uint64_t no_arguments) noexcept;
     Argument(const std::string &arg_name, const std::string &no_arguments) noexcept;
-    ~Argument() noexcept;
+    ~Argument() noexcept = default;
 
     const std::string &             option(const uint64_t idx) const noexcept;
     uint64_t                        no_option_names() const noexcept;
-    const std::pair<uint64_t, bool> argumentType() const noexcept;
+    std::pair<uint64_t, bool> argumentType() const noexcept;
     const std::string &             argName() const noexcept;
 
     virtual bool        find(std::vector<std::string> argv) noexcept;

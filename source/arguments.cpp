@@ -1,16 +1,17 @@
 #include "arguments.h"
 #include <iostream>
+#include <utility>
 
-Argument::Argument(const std::string &arg_name, const uint64_t no_arguments,
-    const std::vector<std::string> options) noexcept
-  : _no_arguments(no_arguments), _arg_name(arg_name), _fixed_size(true),
-    _option_names(options) {
+Argument::Argument(std::string arg_name, const uint64_t no_arguments,
+    std::vector<std::string>  options) noexcept
+  : _no_arguments(no_arguments), _arg_name(std::move(arg_name)), _fixed_size(true),
+    _option_names(std::move(options)) {
 }
 
-Argument::Argument(const std::string &arg_name, const std::string &no_arguments,
-    const std::vector<std::string> options) noexcept
-  : _no_arguments(Argument::stringToArgNum(no_arguments)), _arg_name(arg_name),
-    _fixed_size(false), _option_names(options) {
+Argument::Argument(std::string arg_name, const std::string &no_arguments,
+    std::vector<std::string>  options) noexcept
+  : _no_arguments(Argument::stringToArgNum(no_arguments)), _arg_name(std::move(arg_name)),
+    _fixed_size(false), _option_names(std::move(options)) {
     std::cerr << "Not jet implemented: " << __FILE__ << ": " << __func__;
 }
 
@@ -28,8 +29,6 @@ Argument::Argument(
               << std::endl;
 }
 
-Argument::~Argument() noexcept {
-}
 
 const std::string &Argument::option(const uint64_t idx) const noexcept {
     return _option_names[idx];
@@ -39,7 +38,7 @@ uint64_t Argument::no_option_names() const noexcept {
     return _option_names.size();
 }
 
-const std::pair<uint64_t, bool> Argument::argumentType() const noexcept {
+std::pair<uint64_t, bool> Argument::argumentType() const noexcept {
     return {_no_arguments, _fixed_size};
 }
 
@@ -76,4 +75,3 @@ std::vector<std::string> Argument::optionNameFromArgumentName(
     return option_names;
 }
 
-/*** ARGUMENT IMPLEMENTATION ***/
