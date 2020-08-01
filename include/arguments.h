@@ -15,7 +15,7 @@ class Argument {
   Argument(const std::string &arg_name, const uint64_t no_arguments) noexcept;
   Argument(const std::string &arg_name,
            const std::string &no_arguments) noexcept;
-  ~Argument() noexcept = default;
+  virtual ~Argument() noexcept = default;
 
   const std::string &option(const uint64_t idx) const noexcept;
   uint64_t no_option_names() const noexcept;
@@ -37,7 +37,7 @@ class Argument {
 };
 
 template <typename ArgumentType>
-class ArgumentImpl : public Argument {
+class ArgumentImpl final : public Argument {
  public:
   ArgumentImpl(const std::string &arg_name,
                const uint64_t no_arguments) noexcept;

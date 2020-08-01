@@ -23,7 +23,7 @@ class Colleen {
 
  public:
   Colleen() noexcept;
-  ~Colleen() noexcept;
+  virtual ~Colleen() noexcept;
 
   template <typename T>
   void addArgument(std::string argument_name,

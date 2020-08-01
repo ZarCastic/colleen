@@ -7,6 +7,8 @@ set(SOURCES
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_definitions("-Wall -Werror -Wno-unknown-pragmas")
+
 set(TEST_SOURCES source/main_tests.cpp
         source/colleen_test.cpp)
 add_executable(unit_tests ${SOURCES} ${TEST_SOURCES})

@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wwritable-strings"
+#pragma ide diagnostic ignored "cert-err58-cpp"
 //
 // Created by Tobias Fuchs on 01.08.20.
 //
@@ -21,7 +24,7 @@ TEST(ColleenTest, OneArgument) {
   ASSERT_EQ(argument->argumentType().first, 1);
   ASSERT_EQ(argument->argumentType().second, true);
 
-  auto option = argument->option(0);
+  const auto &option = argument->option(0);
   EXPECT_EQ(option, "--testArg");
 }
 
@@ -62,7 +65,7 @@ TEST(ColleenTest, ParseSingle) {
   colleen.addArgument<std::string>("testArg", 1);
 
   int argc = 2;
-  char *argv2[] = {"Colleen", "noFullfill"};
+  char *argv2[] = {"Colleen", "noFulfill"};
   EXPECT_THROW(colleen.parse(argc, argv2), std::invalid_argument);
 
   int argc1 = 4;
@@ -89,7 +92,7 @@ TEST(ColleenTest, ParseMulti) {
   colleen.addArgument<std::string>("testArg3", 2);
 
   int argc = 2;
-  char *argv2[] = {"Colleen", "noFullfill"};
+  char *argv2[] = {"Colleen", "noFulfill"};
   EXPECT_THROW(colleen.parse(argc, argv2), std::invalid_argument);
 
   int argc1 = 9;
@@ -121,3 +124,4 @@ TEST(ColleenTest, ParseMulti) {
   output = testing::internal::GetCapturedStdout();
   EXPECT_EQ(output, "Hello\nWorld\n");
 }
+#pragma clang diagnostic pop
