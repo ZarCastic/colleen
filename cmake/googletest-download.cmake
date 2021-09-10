@@ -12,8 +12,8 @@ ExternalProject_Add(
   GIT_REPOSITORY
     https://github.com/google/googletest.git
   GIT_TAG
-    release-1.10.0
-  CONFIGURE_COMMAND ""
+        release-1.11.0
+        CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
   TEST_COMMAND ""
