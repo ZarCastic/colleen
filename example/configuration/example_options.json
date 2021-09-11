@@ -1,0 +1,13 @@
+{
+  "network": {
+    "hostname": {
+      "type": "string",
+      "description": "hostname of connection",
+      "default": "localhost"
+    },
+    "port": {
+      "type": "uint",
+      "default": 2020
+    }
+  }
+}
