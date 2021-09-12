@@ -10,13 +10,16 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Configure
         run: |
-          pip3 install wheel setuptools
-          pip3 install conan
+          pip3 install wheel setuptools conan
+          cd ${{github.workspace}} && conan install . --build
       - name: Build
         run: ${{github.workspace}}/build-process/build.sh --release
+      - name: Test
+        run: ${{github.workspace}}/build-process/run-tests.sh --build
+

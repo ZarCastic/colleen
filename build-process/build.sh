@@ -22,9 +22,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-conan install "${THIS_DIR}" --build
-cp "${THIS_DIR}"/conanbuildinfo.cmake "${THIS_DIR}"/..
-
 mkdir -p "${BUILD_DIR}"
 cmake -B "${BUILD_DIR}" -S "${THIS_DIR}"/.. -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"
 make -C "${BUILD_DIR}"
