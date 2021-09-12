@@ -7,20 +7,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(COLLEEN_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/source)
 set(COLLEEN_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include)
 
-set(COLLEEN_SOURCES
-        ${COLLEEN_SOURCE_DIR}/colleen/colleen.cpp
-        ${COLLEEN_SOURCE_DIR}/colleen/argument.cpp
-        )
+file(GLOB_RECURSE COLLEEN_SOURCES ${COLLEEN_SOURCE_DIR}/*.cpp)
 
-add_library(${PROJECT_NAME})
-target_sources(${PROJECT_NAME}
-        PRIVATE
-        ${COLLEEN_SOURCES}
-        )
-target_include_directories(${PROJECT_NAME}
-        PUBLIC
-        ${COLLEEN_INCLUDE_DIR}
-        )
-target_precompile_headers(${PROJECT_NAME}
-        PRIVATE ${COLLEEN_INCLUDE_DIR}/colleen/common.h
-        )
+if (NOT TARGET ${PROJECT_NAME})
+    add_library(${PROJECT_NAME} INTERFACE)
+    target_sources(${PROJECT_NAME}
+            INTERFACE
+            ${COLLEEN_SOURCES}
+            )
+    target_include_directories(${PROJECT_NAME}
+            INTERFACE
+            ${COLLEEN_INCLUDE_DIR}
+            )
+endif ()

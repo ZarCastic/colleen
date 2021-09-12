@@ -1,0 +1,6 @@
+{
+  "string_param": {
+    "type": "string",
+    "default": "Hello World"
+  }
+}
