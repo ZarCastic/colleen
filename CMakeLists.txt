@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-execute_process(COMMAND ${CMAKE_CURRENT_LIST_DIR}/conanbuildinfo.cmake COMMAND conan install . --build)
+execute_process(COMMAND conan install . --build)
 include(${CMAKE_CURRENT_LIST_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
