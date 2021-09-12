@@ -60,6 +60,7 @@ def __add_class(class_name: str, base_path: str, json_config: Dict[str, Any]) ->
     header_file_name = "/".join(path_parts) + f"/{class_name}.h"
     source_file_name = "/".join(path_parts) + f"/{class_name}.cpp"
     namespace_string = "::".join(path_parts)
+    option_name = ".".join(path_parts) + f".{class_name}"
 
     option_types = {"string": "std::string", "int": "int64_t", "uint": "uint64_t", "float": "double"}
     assert json_config["type"] in option_types
@@ -92,7 +93,7 @@ def __add_class(class_name: str, base_path: str, json_config: Dict[str, Any]) ->
         source_file.write(f"#include \"{header_file_name}\"\n"
                           f"namespace {namespace_string} {{\n")
         if default_value:
-            source_file.write(f"autogen_{class_name} {class_name}({default_value});\n")
+            source_file.write(f"autogen_{class_name} {class_name}(\"{option_name}\", {default_value});\n")
         else:
-            source_file.write(f"autogen_{class_name} {class_name};\n")
+            source_file.write(f"autogen_{class_name} {class_name}(\"{option_name}\";\n")
         source_file.write(f"}} // namespace {namespace_string}")

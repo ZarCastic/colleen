@@ -12,7 +12,7 @@ file(GLOB_RECURSE COLLEEN_SOURCES ${COLLEEN_SOURCE_DIR}/*.cpp)
 if (NOT TARGET ${PROJECT_NAME})
     add_library(${PROJECT_NAME} INTERFACE)
     target_sources(${PROJECT_NAME}
-            PRIVATE
+            INTERFACE
             ${COLLEEN_SOURCES}
             )
     target_include_directories(${PROJECT_NAME}
