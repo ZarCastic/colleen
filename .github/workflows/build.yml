@@ -14,5 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Configure
+        run: |
+          pip3 install wheel setuptools
+          pip3 install conan
       - name: Build
         run: ${{github.workspace}}/build-process/build.sh --release
