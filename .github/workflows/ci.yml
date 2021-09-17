@@ -17,6 +17,7 @@ jobs:
       - name: Configure
         run: |
           pip3 install wheel setuptools conan
+          cd ${{github.workspace}} && conan install . --build
       - name: Build
         run: ${{github.workspace}}/build-process/build.sh --release
       - name: Test
