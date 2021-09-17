@@ -16,17 +16,17 @@ set(COLLEEN_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include)
 file(GLOB_RECURSE COLLEEN_SOURCES ${COLLEEN_SOURCE_DIR}/*.cpp)
 
 if (NOT TARGET ${PROJECT_NAME})
-    add_library(${PROJECT_NAME} INTERFACE)
+    add_library(${PROJECT_NAME})
     target_sources(${PROJECT_NAME}
-            INTERFACE
+            PRIVATE
             ${COLLEEN_SOURCES}
             )
     target_include_directories(${PROJECT_NAME}
-            INTERFACE
+            PUBLIC
             ${COLLEEN_INCLUDE_DIR}
             )
     target_link_libraries(${PROJECT_NAME}
-            INTERFACE
+            PUBLIC
             spdlog
             fmt
             )
