@@ -17,4 +17,4 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-"${TEST_BUILD_DIR}"/colleen-test
+"${TEST_BUILD_DIR}"/bin/colleen-test
