@@ -1,11 +1,13 @@
 //
 // Created by Tobias Fuchs on 12.09.21.
 //
-#include <colleen/_impl/base_node.h>
-#include <colleen/_impl/registry.h>
+
+#include "colleen/_impl/registry.h"
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include "colleen/_impl/base_node.h"
+#include "colleen/logging.h"
 
 namespace colleen::_impl {
 
@@ -13,7 +15,7 @@ registry &registry::instance() noexcept {
     static registry instance;
     return instance;
 }
-void registry::add(std::string option_name, base_node *node) {
+void registry::add(const std::string &option_name, base_node *node) {
     if (_options.contains(option_name)) {
         throw bad_option("Cannot add duplicate option " + option_name);
     }
@@ -30,7 +32,7 @@ std::vector<std::string> split(const std::string &value, char sep) {
     return retval;
 }
 
-bool registry::parse(int argc, char **argv, parse_options options) {
+bool registry::parse(int argc, const char **argv, parse_options options) {
     std::ostringstream error_stream;
 
     argv++;
@@ -46,7 +48,7 @@ bool registry::parse(int argc, char **argv, parse_options options) {
         const std::string option = argument_parts[0].substr(2);  // strip "--"
         const std::string &option_value = argument_parts[1];
         if (!_options.contains(option)) {
-            error_stream << "Cannot find option " << option << "\n";
+            error_stream << "Cannot find option: " << option << "\n";
         } else {
             if (!_options[option]->set(option_value)) {
                 error_stream << "Cannot set option " << option << " with value "
@@ -57,15 +59,15 @@ bool registry::parse(int argc, char **argv, parse_options options) {
 
     for (const auto &option : _options) {
         if (!option.second->satisfied()) {
-            error_stream << "Option not set " << option.first << "\n";
+            error_stream << "Option not set: " << option.first << "\n";
         }
     }
 
-    if (!error_stream) {
+    if (const auto &error_string = error_stream.str(); !error_string.empty()) {
         if (options == parse_options::throw_on_error) {
-            throw(incomplete_or_missing_argument(error_stream.str()));
+            throw(incomplete_or_missing_argument(error_string));
         }
-        std::cerr << error_stream.str() << std::endl;
+        colleen::log::error("{}", error_string);
         return false;
     }
     return true;

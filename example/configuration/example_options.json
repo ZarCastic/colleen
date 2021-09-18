@@ -3,11 +3,11 @@
     "hostname": {
       "type": "string",
       "description": "hostname of connection",
-      "default": "localhost"
+      "default": "default_value"
     },
     "port": {
       "type": "uint",
-      "default": 2020
+      "default": 0
     }
   }
 }

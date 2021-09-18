@@ -3,9 +3,10 @@
 //
 
 #pragma once
-#include <colleen/_impl/base_node.h>
 #include <string>
 #include <utility>
+#include "colleen/_impl/base_node.h"
+#include "colleen/logging.h"
 
 namespace colleen {
 
@@ -13,7 +14,7 @@ using base_node = _impl::base_node;
 
 template <typename option_type>
 class node : public base_node {
-   public:
+  public:
     explicit node(std::string option_name,
                   const option_type option_value = option_type()) noexcept
         : base_node(std::move(option_name)), _value(std::move(option_value)) {}
@@ -26,6 +27,8 @@ class node : public base_node {
     }
 
     bool set(const std::string& value) noexcept override {
+        colleen::log::debug("Setting value for option {} to {}", _option_name,
+                            value);
         if constexpr (std::is_integral_v<option_type> &&
                       std::is_signed_v<option_type>) {
             _value = std::stoll(value);
