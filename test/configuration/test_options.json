@@ -1,0 +1,26 @@
+{
+  "string_option": {
+    "type": "string"
+  },
+  "unsigned_int_option": {
+    "type": "uint"
+  },
+  "signed_int_option": {
+    "type": "int"
+  },
+  "float_option": {
+    "type": "float"
+  },
+  "nested_option": {
+    "nest_level_1_option": {
+      "type": "string"
+    },
+    "nest_level_1_nested_option": {
+      "nest_level_2_option": {
+        "type": "string"
+      },
+      "nest_level_2_nested_empty_option": {
+      }
+    }
+  }
+}

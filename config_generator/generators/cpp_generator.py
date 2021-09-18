@@ -39,28 +39,29 @@ def generate_cpp(output_dir: str = ".", config_json_filename: str = "colleen_con
         hash_file.write(f"{calculated_hash}")
 
 
-def __generate_cpp(key: str, json_config: Dict[str, Any], base_path: str = "config") -> None:
+def __generate_cpp(key: str, json_config: Dict[str, Any], base_path: str = "", ground_path: str = "config") -> None:
     assert ("." not in key)
 
     if "type" in json_config:
         class_name = key
 
-        __add_class(class_name, base_path, json_config)
+        __add_class(class_name, base_path, ground_path, json_config)
     else:
         for key_ in json_config:
             for path in ["source/", "include/"]:
-                if not os.path.isdir(path + base_path + f"/{key}"):
-                    os.mkdir(path + base_path + f"/{key}")
+                complete_path = path + ground_path + "/" + base_path + "/" + key
+                if not os.path.isdir(complete_path):
+                    os.mkdir(complete_path)
             __generate_cpp(key_, json_config[key_], base_path + "/" + key)
 
 
-def __add_class(class_name: str, base_path: str, json_config: Dict[str, Any]) -> None:
+def __add_class(class_name: str, base_path: str, ground_path: str, json_config: Dict[str, Any]) -> None:
     path_parts = base_path.split(sep="/")
 
-    header_file_name = "/".join(path_parts) + f"/{class_name}.h"
-    source_file_name = "/".join(path_parts) + f"/{class_name}.cpp"
-    namespace_string = "::".join(path_parts)
-    option_name = ".".join(path_parts) + f".{class_name}"
+    header_file_name = ground_path + "/".join(path_parts) + f"/{class_name}.h"
+    source_file_name = ground_path + "/".join(path_parts) + f"/{class_name}.cpp"
+    namespace_string = f"{ground_path}" + "::".join(path_parts)
+    option_name = (".".join(path_parts) + f".{class_name}")[1:]
 
     option_types = {"string": "std::string", "int": "int64_t", "uint": "uint64_t", "float": "double"}
     assert json_config["type"] in option_types
@@ -95,5 +96,5 @@ def __add_class(class_name: str, base_path: str, json_config: Dict[str, Any]) ->
         if default_value:
             source_file.write(f"autogen_{class_name} {class_name}(\"{option_name}\", {default_value});\n")
         else:
-            source_file.write(f"autogen_{class_name} {class_name}(\"{option_name}\";\n")
+            source_file.write(f"autogen_{class_name} {class_name}(\"{option_name}\");\n")
         source_file.write(f"}} // namespace {namespace_string}")
