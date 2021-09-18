@@ -9,11 +9,10 @@
 #include <config/string_param.h>
 #include <iostream>
 
-int main(int argc, char **argv) {
+int main(int argc, const char **argv) {
     colleen::_impl::registry::instance().parse(
         argc, argv, colleen::_impl::registry::parse_options::throw_on_error);
-    colleen::log::set_level(
-        spdlog::level::debug);  // Set global log level to debug
+    colleen::log::set_level(colleen::log::log_level::debug);
     colleen::log::info("config::network::hostname: {}",
                        config::network::hostname.get());
     colleen::log::debug("config::network::port: {}",

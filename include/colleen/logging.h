@@ -16,7 +16,14 @@ COLLEEN_MAKE_LOG_FUNCTION(warn);
 COLLEEN_MAKE_LOG_FUNCTION(critical);
 COLLEEN_MAKE_LOG_FUNCTION(debug);
 
-using spdlog::set_level;
-using spdlog::level::level_enum;
+enum class log_level {
+    error = spdlog::level::err,
+    info = spdlog::level::info,
+    warn = spdlog::level::warn,
+    critical = spdlog::level::critical,
+    debug = spdlog::level::debug
+};
+
+void set_level(log_level log_level);
 
 }  // namespace colleen::log
