@@ -17,8 +17,6 @@ class base_node {
 
    protected:
     bool _satisfied{false};
-
-   private:
     const std::string _option_name;
 };
 
