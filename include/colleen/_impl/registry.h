@@ -13,13 +13,13 @@ namespace colleen::_impl {
 class base_node;
 
 class registry {
-   public:
+  public:
     enum class parse_options { none, throw_on_error };
 
     static registry& instance() noexcept;
 
-    void add(std::string option_name, base_node* node);
-    bool parse(int argc, char** argv,
+    void add(const std::string& option_name, base_node* node);
+    bool parse(int argc, const char** argv,
                parse_options options = parse_options::none);
 
     registry(const registry&) = delete;
@@ -28,7 +28,7 @@ class registry {
     registry& operator=(registry&&) = delete;
     ~registry() = default;
 
-   private:
+  private:
     registry() = default;
 
     std::unordered_map<std::string, base_node*> _options;
